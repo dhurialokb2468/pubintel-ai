@@ -127,27 +127,9 @@ node test-links.js
 
 ---
 
-## 📁 Repository Directory Map
+## 🔮 Platform Roadmap & Ecosystem Integrations
 
-```
-pubintel-ai/
-├── src/
-│   ├── app/                    # Next.js App Router Pages
-│   │   ├── creator/[id]/       # Creator profile & bibliography view
-│   │   ├── discover/           # Advanced search parameter engine
-│   │   ├── import/             # CSV dataset uploader
-│   │   ├── opportunity/[id]/   # Deep editorial analysis dossier
-│   │   ├── results/            # Search results grid & source pills
-│   │   ├── saved-searches/     # Bookmarked search history
-│   │   └── page.tsx            # Main Dashboard Overview
-│   ├── components/             # UI Components (Navbar, ContentCard, ScoreBadge, etc.)
-│   ├── connectors/             # Data crawlers (Open Library, Google Books, YouTube)
-│   ├── data/                   # Mock datasets & 50+ domain taxonomy
-│   ├── services/               # Client search fallback & CSV export helpers
-│   └── types/                  # TypeScript definitions for ContentItem & Creator
-├── test-ui.js                  # Playwright full-site visual audit test script
-├── test-links.js               # Playwright link redirection test script
-├── next.config.js              # Next.js static export & basePath configuration
-├── tailwind.config.js          # Custom theme, neon tokens, and glassmorphic utility rules
-└── README.md                   # Platform documentation
-```
+- **Automated Book Outline Generator**: Generates candidate chapter outlines directly from discovered online video transcripts and tutorial modules.
+- **Amazon KDP & Retail Sales Velocity Sync**: Real-time tracking of competitive book sales rank and market saturation.
+- **Publishing CRM Integration**: 1-click export of opportunity dossiers into Notion, Airtable, and enterprise acquisition databases.
+- **Rights & Author Contact Intelligence**: Public contact path verification and rights availability indicators for acquisition team outreach.
