@@ -124,12 +124,3 @@ node test-ui.js
 # Run link health and external URL redirection test
 node test-links.js
 ```
-
----
-
-## 🔮 Platform Roadmap & Ecosystem Integrations
-
-- **Automated Book Outline Generator**: Generates candidate chapter outlines directly from discovered online video transcripts and tutorial modules.
-- **Amazon KDP & Retail Sales Velocity Sync**: Real-time tracking of competitive book sales rank and market saturation.
-- **Publishing CRM Integration**: 1-click export of opportunity dossiers into Notion, Airtable, and enterprise acquisition databases.
-- **Rights & Author Contact Intelligence**: Public contact path verification and rights availability indicators for acquisition team outreach.
