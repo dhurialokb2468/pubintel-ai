@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { ContentItem } from "@/types/content";
 import { ScoreBadge, PublishingTypeBadge } from "./ScoreBadge";
 import {
@@ -41,8 +40,22 @@ export function ContentCard({ item }: ContentCardProps) {
     }
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // If user clicked internal analysis link or creator link, don't trigger external redirect
+    const target = e.target as HTMLElement;
+    if (target.closest("a") || target.closest("button")) return;
+
+    if (item.url) {
+      window.open(item.url, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
-    <div className="glass-card rounded-2xl p-5 flex flex-col justify-between group relative overflow-hidden">
+    <div
+      onClick={handleCardClick}
+      className="glass-card rounded-2xl p-5 flex flex-col justify-between group relative overflow-hidden cursor-pointer hover:border-sky-500/50 transition-all"
+      title={`Click to open external source: ${item.source}`}
+    >
       {/* Decorative top accent glow line */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -54,7 +67,7 @@ export function ContentCard({ item }: ContentCardProps) {
               {getContentTypeIcon()}
               <span className="capitalize">{item.contentType.replace("_", " ")}</span>
             </span>
-            <span className="text-[11px] text-slate-400 font-medium">{item.source}</span>
+            <span className="text-[11px] text-slate-400 font-medium">via {item.source}</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -68,21 +81,33 @@ export function ContentCard({ item }: ContentCardProps) {
         {/* Thumbnail Preview & Title */}
         <div className="flex gap-4">
           {item.imageUrl && (
-            <div className="w-16 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-slate-900 border border-slate-800 relative group-hover:scale-105 transition-transform">
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-16 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-slate-900 border border-slate-800 relative group-hover:scale-105 transition-transform block"
+            >
               <img
                 src={item.imageUrl}
                 alt={item.title}
                 className="w-full h-full object-cover"
               />
-            </div>
+            </a>
           )}
 
           <div className="flex-1 min-w-0">
-            <Link href={`/opportunity/${item.id}`} className="group-hover:text-sky-300 transition-colors">
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group-hover:text-sky-300 transition-colors inline-flex items-start gap-1"
+            >
               <h3 className="font-heading font-bold text-base text-slate-100 line-clamp-2 leading-snug">
                 {item.title}
               </h3>
-            </Link>
+              <ExternalLink className="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+            </a>
+
             {item.subtitle && (
               <p className="text-xs text-slate-400 mt-1 line-clamp-1 italic">{item.subtitle}</p>
             )}
@@ -147,18 +172,29 @@ export function ContentCard({ item }: ContentCardProps) {
 
       {/* Footer Editorial Rationale */}
       <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
-        <div className="flex items-center gap-1.5 text-slate-300 truncate max-w-[75%]">
+        <div className="flex items-center gap-1.5 text-slate-300 truncate max-w-[70%]">
           <TrendingUp className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
           <span className="truncate font-medium">{item.opportunityReason || "High publishing candidate"}</span>
         </div>
 
-        <Link
-          href={`/opportunity/${item.id}`}
-          className="flex items-center gap-1 text-xs font-bold text-sky-400 hover:text-sky-300 transition-colors flex-shrink-0"
-        >
-          <span>Analysis</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
+        <div className="flex items-center gap-2">
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 text-xs font-bold text-slate-300 hover:text-white bg-slate-800 px-2 py-1 rounded-lg border border-slate-700 transition-colors"
+          >
+            <span>Open Source</span>
+            <ExternalLink className="w-3 h-3 text-slate-400" />
+          </a>
+          <Link
+            href={`/opportunity/${item.id}`}
+            className="flex items-center gap-1 text-xs font-bold text-sky-400 hover:text-sky-300 transition-colors flex-shrink-0"
+          >
+            <span>Analysis</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
       </div>
     </div>
   );

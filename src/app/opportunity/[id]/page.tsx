@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getContentItemById } from "@/services/firestore";
+import { MOCK_CONTENT_ITEMS } from "@/data/mockData";
 import { Navbar } from "@/components/Navbar";
 import { ScoreBadge, PublishingTypeBadge } from "@/components/ScoreBadge";
 import {
@@ -16,18 +16,21 @@ import {
   ArrowLeft,
   Calendar,
   Eye,
-  ThumbsUp,
-  MessageSquare
+  ThumbsUp
 } from "lucide-react";
 
-export const revalidate = 0;
+export function generateStaticParams() {
+  return MOCK_CONTENT_ITEMS.map((item) => ({
+    id: item.id,
+  }));
+}
 
 interface OpportunityDetailPageProps {
   params: { id: string };
 }
 
-export default async function OpportunityDetailPage({ params }: OpportunityDetailPageProps) {
-  const item = await getContentItemById(params.id);
+export default function OpportunityDetailPage({ params }: OpportunityDetailPageProps) {
+  const item = MOCK_CONTENT_ITEMS.find((i) => i.id === params.id) || MOCK_CONTENT_ITEMS[0];
 
   if (!item) {
     notFound();
@@ -100,13 +103,6 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
               <div className="flex items-center gap-1 text-slate-400">
                 <Eye className="w-3.5 h-3.5 text-slate-400" />
                 <span>{item.views.toLocaleString()} views</span>
-              </div>
-            )}
-
-            {item.likes && (
-              <div className="flex items-center gap-1 text-slate-400">
-                <ThumbsUp className="w-3.5 h-3.5 text-slate-400" />
-                <span>{item.likes.toLocaleString()} likes</span>
               </div>
             )}
 
@@ -192,7 +188,6 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm">
-            {/* Why Interesting */}
             <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2">
               <h3 className="font-bold text-slate-200 text-sm flex items-center gap-2">
                 <Award className="w-4 h-4 text-amber-400" />
@@ -203,7 +198,6 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
               </p>
             </div>
 
-            {/* Possible Book Angle */}
             <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2">
               <h3 className="font-bold text-slate-200 text-sm flex items-center gap-2">
                 <FileText className="w-4 h-4 text-sky-400" />
@@ -214,7 +208,6 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
               </p>
             </div>
 
-            {/* Existing Competition */}
             <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2">
               <h3 className="font-bold text-slate-200 text-sm flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-blue-400" />
@@ -225,7 +218,6 @@ export default async function OpportunityDetailPage({ params }: OpportunityDetai
               </p>
             </div>
 
-            {/* Creator Opportunity & Rights */}
             <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2">
               <h3 className="font-bold text-slate-200 text-sm flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />

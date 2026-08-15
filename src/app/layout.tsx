@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Opportunity Radar | Editorial Publishing Intelligence",
+  title: "PubIntel AI | Editorial Publishing Intelligence",
   description: "Discover self-published books, tutorial playlists, creators, and emerging topics with high publishing potential.",
 };
 

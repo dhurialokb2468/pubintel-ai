@@ -6,6 +6,8 @@ import { Navbar } from "@/components/Navbar";
 import { ContentCard } from "@/components/ContentCard";
 import { ContentItem } from "@/types/content";
 import { INITIAL_DOMAINS, AUDIENCE_TYPES } from "@/data/taxonomy";
+import { executeClientSideSearch } from "@/services/clientSearch";
+import { exportItemsToCSV } from "@/services/csvExporter";
 import {
   BookOpen,
   Sparkles,
@@ -66,14 +68,27 @@ function ResultsContent() {
         }),
       });
 
+      if (!res.ok) {
+        throw new Error(`API returned ${res.status}`);
+      }
+
       const data = await res.json();
       if (data.success) {
         setResults(data.results || []);
         setSourceStatus(data.sourceStatus || {});
         setTotalDiscovered(data.totalDiscovered || 0);
+        return;
       }
     } catch (err) {
-      console.error("Search fetch failed:", err);
+      console.warn("API route unavailable, using client search engine:", err);
+      const clientData = await executeClientSideSearch(query, {
+        domain: domainFilter,
+        contentType: contentTypeFilter,
+        sortBy,
+      });
+      setResults(clientData.results || []);
+      setSourceStatus(clientData.sourceStatus || {});
+      setTotalDiscovered(clientData.totalDiscovered || 0);
     } finally {
       setLoading(false);
     }
@@ -115,13 +130,13 @@ function ResultsContent() {
       {/* Header Bar */}
       <div className="glass-panel rounded-2xl p-6 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-radar-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-sky-400 mb-1">
             <Search className="w-3.5 h-3.5" />
             <span>Editorial Intelligence Search</span>
           </div>
           <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
             <span>Query:</span>
-            <span className="text-radar-300">"{query || "All Professional Topics"}"</span>
+            <span className="text-sky-300">"{query || "All Professional Topics"}"</span>
           </h1>
           <p className="text-xs text-slate-400 mt-1">
             Discovered {totalDiscovered} total opportunities across 4 sources ({booksResults.length} books, {contentToBookResults.length} content leads)
@@ -137,13 +152,13 @@ function ResultsContent() {
             <Bookmark className="w-3.5 h-3.5 text-amber-400" />
             <span>{savedSuccess ? "Search Saved!" : "Save Search"}</span>
           </button>
-          <a
-            href="/api/export"
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-radar-600 hover:bg-radar-500 text-white text-xs font-semibold shadow-md shadow-radar-600/30 transition-colors"
+          <button
+            onClick={() => exportItemsToCSV(results, `opportunity-radar-${query || "all"}.csv`)}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold shadow-md shadow-sky-600/30 transition-colors"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export CSV</span>
-          </a>
+          </button>
         </div>
       </div>
 
@@ -178,7 +193,7 @@ function ResultsContent() {
             onClick={() => setActiveTab("content_to_book")}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
               activeTab === "content_to_book"
-                ? "bg-radar-600 text-white shadow-md"
+                ? "bg-sky-600 text-white shadow-md"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -190,7 +205,7 @@ function ResultsContent() {
             onClick={() => setActiveTab("books")}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
               activeTab === "books"
-                ? "bg-radar-600 text-white shadow-md"
+                ? "bg-sky-600 text-white shadow-md"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -234,7 +249,7 @@ function ResultsContent() {
       {/* Grid of Results */}
       {loading ? (
         <div className="py-20 text-center space-y-4">
-          <div className="w-10 h-10 border-4 border-radar-500 border-t-transparent rounded-full animate-spin mx-auto" />
+          <div className="w-10 h-10 border-4 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="text-sm font-medium text-slate-400">Running multi-factor scoring engine across enabled sources...</p>
         </div>
       ) : displayedList.length === 0 ? (

@@ -1,54 +1,25 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCreatorById, getAllContentItems } from "@/services/firestore";
+import { MOCK_CREATORS, MOCK_CONTENT_ITEMS } from "@/data/mockData";
 import { Navbar } from "@/components/Navbar";
 import { ContentCard } from "@/components/ContentCard";
 import { ScoreBadge } from "@/components/ScoreBadge";
 import { User, Award, ExternalLink, Mail, Sparkles, BookOpen, ArrowLeft, ShieldCheck } from "lucide-react";
 
-export const revalidate = 0;
+export function generateStaticParams() {
+  return MOCK_CREATORS.map((c) => ({
+    id: c.id,
+  }));
+}
 
 interface CreatorDetailPageProps {
   params: { id: string };
 }
 
-export default async function CreatorDetailPage({ params }: CreatorDetailPageProps) {
-  let creator = await getCreatorById(params.id);
-  const allItems = await getAllContentItems();
-
-  if (!creator) {
-    const matchedItems = allItems.filter(
-      (i) => i.creatorId === params.id || i.id === params.id || (i.creator && i.creator.toLowerCase().includes(params.id.toLowerCase()))
-    );
-
-    if (matchedItems.length > 0) {
-      const first = matchedItems[0];
-      creator = {
-        id: params.id,
-        name: first.creator || "Discovered Creator",
-        bio: `Educational content creator specializing in ${first.primaryDomain || "professional subjects"}.`,
-        sourceProfiles: [{ platform: first.source, url: first.url }],
-        primaryDomains: [first.primaryDomain || "Artificial Intelligence"],
-        primaryTopics: [first.primaryTopic || "Agentic AI"],
-        contentItemIds: matchedItems.map((m) => m.id),
-        topContentItems: matchedItems,
-        audienceSignals: { totalViews: 150000, avgEngagementRate: 8.5 },
-        creatorAuthorityScore: first.creatorAuthorityScore || 88,
-        avgBookPotentialScore: first.bookPotentialScore || 90,
-        creatorOpportunityScore: first.opportunityScore || 92,
-        potentialBookTopics: [first.primaryTopic || "AI Strategy"],
-        creatorContactability: first.creatorContactability || "high",
-        publicContactRoute: "Public Profile Contact Route Available",
-        firstSeenAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-    } else {
-      notFound();
-    }
-  }
-
-  const creatorItems = allItems.filter(
-    (i) => i.creatorId === creator?.id || (creator?.name && i.creator === creator.name)
+export default function CreatorDetailPage({ params }: CreatorDetailPageProps) {
+  let creator = MOCK_CREATORS.find((c) => c.id === params.id) || MOCK_CREATORS[0];
+  const creatorItems = MOCK_CONTENT_ITEMS.filter(
+    (i) => i.creatorId === creator.id || (creator.name && i.creator === creator.name)
   );
 
   return (

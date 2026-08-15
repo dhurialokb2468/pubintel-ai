@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { exportItemsToCSV } from "@/services/csvExporter";
+import { MOCK_CONTENT_ITEMS } from "@/data/mockData";
 import {
   Radar,
   Search,
@@ -46,12 +48,12 @@ export function Navbar() {
           </div>
           <div className="hidden sm:block">
             <div className="flex items-center gap-2">
-              <span className="font-heading font-extrabold text-lg text-white tracking-tight">Opportunity Radar</span>
+              <span className="font-heading font-extrabold text-lg text-white tracking-tight">PubIntel AI</span>
               <span className="px-2 py-0.5 text-[10px] font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30 rounded-full uppercase tracking-wider">
-                Editorial v1.0
+                v1.0
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 font-medium">Acquisition & Publishing Intelligence</p>
+            <p className="text-[11px] text-slate-400 font-medium">Publishing Intelligence & Acquisition Engine</p>
           </div>
         </Link>
 
@@ -98,14 +100,14 @@ export function Navbar() {
           })}
 
           {/* Quick Export Button */}
-          <a
-            href="/api/export"
+          <button
+            onClick={() => exportItemsToCSV(MOCK_CONTENT_ITEMS, "pubintel-ai-report.csv")}
             className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors ml-1"
             title="Export Discovered Opportunities to CSV"
           >
             <Download className="w-3.5 h-3.5 text-sky-400" />
             <span>Export</span>
-          </a>
+          </button>
         </nav>
       </div>
     </header>
