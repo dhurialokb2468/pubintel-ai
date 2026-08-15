@@ -17,7 +17,6 @@ export class YouTubeConnector implements SourceConnector {
         if (response.ok) {
           const data = await response.json();
           if (data.items && Array.isArray(data.items)) {
-            // Extract video IDs to fetch live view counts & statistics
             const videoIds = data.items
               .filter((item: any) => item.id.videoId)
               .map((item: any) => item.id.videoId)
