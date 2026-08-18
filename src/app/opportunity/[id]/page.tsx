@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MOCK_CONTENT_ITEMS } from "@/data/mockData";
+import { generate570Opportunities } from "@/services/clientSearch";
 import { Navbar } from "@/components/Navbar";
 import { ScoreBadge, PublishingTypeBadge } from "@/components/ScoreBadge";
 import {
@@ -15,12 +16,12 @@ import {
   ShieldCheck,
   ArrowLeft,
   Calendar,
-  Eye,
-  ThumbsUp
+  Eye
 } from "lucide-react";
 
 export function generateStaticParams() {
-  return MOCK_CONTENT_ITEMS.map((item) => ({
+  const allItems = [...generate570Opportunities(), ...MOCK_CONTENT_ITEMS];
+  return allItems.map((item) => ({
     id: item.id,
   }));
 }
@@ -30,7 +31,8 @@ interface OpportunityDetailPageProps {
 }
 
 export default function OpportunityDetailPage({ params }: OpportunityDetailPageProps) {
-  const item = MOCK_CONTENT_ITEMS.find((i) => i.id === params.id) || MOCK_CONTENT_ITEMS[0];
+  const allItems = [...generate570Opportunities(), ...MOCK_CONTENT_ITEMS];
+  const item = allItems.find((i) => i.id === params.id) || allItems[0];
 
   if (!item) {
     notFound();
@@ -45,11 +47,11 @@ export default function OpportunityDetailPage({ params }: OpportunityDetailPageP
       <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
         {/* Navigation back button */}
         <Link
-          href="/results"
+          href="/pubintel-ai/"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-sky-300 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Search Results</span>
+          <span>Back to Landing Page Opportunities</span>
         </Link>
 
         {/* Hero Header */}

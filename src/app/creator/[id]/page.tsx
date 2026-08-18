@@ -28,11 +28,11 @@ export default function CreatorDetailPage({ params }: CreatorDetailPageProps) {
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
         <Link
-          href="/results"
+          href="/pubintel-ai/"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-sky-300 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Results</span>
+          <span>Back to Landing Page Opportunities</span>
         </Link>
 
         {/* Hero Creator Header */}
