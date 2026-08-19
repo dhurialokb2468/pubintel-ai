@@ -7,7 +7,7 @@ import { MOCK_CONTENT_ITEMS, MOCK_CREATORS } from "@/data/mockData";
 import { INITIAL_DOMAINS } from "@/data/taxonomy";
 import { ContentCard } from "./ContentCard";
 import { ScoreBadge } from "./ScoreBadge";
-import { executeClientSideSearch } from "@/services/clientSearch";
+import { executeClientSideSearch, generate570Opportunities } from "@/services/clientSearch";
 import { exportItemsToCSV } from "@/services/csvExporter";
 import {
   Search,
@@ -28,7 +28,7 @@ import {
 export function DashboardOverview() {
   const router = useRouter();
   const [heroQuery, setHeroQuery] = useState("");
-  const [items, setItems] = useState(MOCK_CONTENT_ITEMS);
+  const [items, setItems] = useState(() => [...generate570Opportunities(), ...MOCK_CONTENT_ITEMS]);
   const [loading, setLoading] = useState(false);
 
   const [activeTab, setActiveTab] = useState<"all" | "content_to_book" | "books">("all");
