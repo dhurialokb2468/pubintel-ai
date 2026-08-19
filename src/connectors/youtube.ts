@@ -117,7 +117,7 @@ export class YouTubeConnector implements SourceConnector {
         description: `Comprehensive video series covering ${query} from beginner fundamentals to production deployment with practical frameworks.`,
         creator: "Elena Rostova",
         creatorId: "creator-elena-rostova",
-        url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`,
+        url: `https://www.youtube.com/watch?v=bSY5pCzp2Wk`,
         imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop",
         publicationDate: "2025-11-20",
         views: 245000,
